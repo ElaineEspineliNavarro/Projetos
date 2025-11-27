@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
+    <title>Sistema de Agendamento de Visitas a Campo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4a90e2 0%, #1a3a5e 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4a90e2 0%, #1a3a5e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .logo-img {
+            max-width: 200px;
+            max-height: 120px;
+            margin-bottom: 10px;
+            object-fit: contain;
+        }
+
+        .tagline {
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            opacity: 0.95;
+            margin-top: 5px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .form-section {
+            padding: 15px 30px;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            max-height: 50vh;
+            overflow-y: auto;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .form-row.full-width {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 4px;
+            font-weight: 600;
+            color: #333;
+            font-size: 0.75rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 6px 8px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4a90e2 0%, #1a3a5e 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .list-section {
+            padding: 30px;
+        }
+
+        .list-section h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 1.5rem;
+        }
+
+        .events-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+
+        .events-table thead {
+            background: linear-gradient(135deg, #4a90e2 0%, #1a3a5e 100%);
+            color: white;
+        }
+
+        .events-table th {
+            padding: 12px 8px;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .events-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 0.8rem;
+            vertical-align: middle;
+        }
+
+        .events-table tbody tr {
+            transition: background-color 0.2s;
+        }
+
+        .events-table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .events-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        .table-input {
+            width: 100%;
+            padding: 4px 6px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: inherit;
+        }
+
+        .table-input:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        .table-textarea {
+            width: 100%;
+            padding: 4px 6px;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 40px;
+        }
+
+        .table-textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        .events-list {
+            overflow-x: auto;
+        }
+
+        .event-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .event-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .event-fields > .event-field-readonly {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-field.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .event-field label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .event-field input,
+        .event-field textarea {
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.3s;
+            width: 100%;
+        }
+
+        .event-field input:focus,
+        .event-field textarea:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        .event-field textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .event-field-readonly {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-field-readonly.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .event-field-readonly label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+        }
+
+        .event-field-readonly .field-value {
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            color: #333;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            white-space: pre-wrap;
+        }
+
+        .event-field-readonly .field-value.empty {
+            color: #999;
+            font-style: italic;
+        }
+
+        .btn-edit {
+            background: #4a90e2;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-edit:hover {
+            background: #357abd;
+            transform: scale(1.05);
+        }
+
+        .btn-save {
+            background: #28a745;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-save:hover {
+            background: #218838;
+            transform: scale(1.05);
+        }
+
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background: #5a6268;
+            transform: scale(1.05);
+        }
+
+        .events-table tbody tr.editing-row {
+            background-color: #e3f2fd;
+        }
+
+        .event-info {
+            flex: 1;
+        }
+
+        .event-date {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .event-description {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 10px;
+        }
+
+        .event-status {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-aguardando {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffc107;
+        }
+
+        .status-concluido {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #28a745;
+        }
+
+        .status-cancelado {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #dc3545;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .status-select {
+            padding: 8px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            background: white;
+            transition: border-color 0.3s;
+        }
+
+        .status-select:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+
+        .btn-delete {
+            background: #dc3545;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-delete:hover {
+            background: #c82333;
+            transform: scale(1.05);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+
+        .empty-state svg {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 1.1rem;
+        }
+
+        .logo-fiex {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            font-size: 3.5rem;
+            font-weight: bold;
+            font-family: 'Brush Script MT', cursive, sans-serif;
+        }
+
+        .logo-f {
+            color: #ff0000;
+            font-size: 4rem;
+        }
+
+        .logo-iex {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .logo-img {
+                max-width: 150px;
+                max-height: 80px;
+            }
+
+            .logo-fiex {
+                font-size: 2.5rem;
+            }
+
+            .logo-f {
+                font-size: 3rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .events-table {
+                font-size: 0.7rem;
+            }
+
+            .events-table th,
+            .events-table td {
+                padding: 8px 4px;
+                font-size: 0.7rem;
+            }
+
+            .table-actions {
+                flex-wrap: wrap;
+                gap: 3px;
+            }
+
+            .events-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <img src="logo-fiex.png" alt="FIEX Logo" class="logo-img" 
+                     onerror="this.style.display='none'; const fallback = this.nextElementSibling; if(fallback) fallback.style.display='flex';">
+                <div class="logo-fiex" style="display: none;">
+                    <span class="logo-f">F</span><span class="logo-iex">iex</span>
+                </div>
+                <div class="tagline">FRIBOI • INOVAÇÃO E EXCELÊNCIA</div>
+            </div>
+            <h1>📅 Sistema de Agendamento de Visitas a Campo</h1>
+            <p>Marque suas visitas e classifique como concluido ou cancelado para gestão das visitas</p>
+        </div>
+
+        <div class="form-section">
+            <form id="agendamentoForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dataVisita">Data da Visita:</label>
+                        <input type="date" id="dataVisita" name="dataVisita" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nome">Nome:</label>
+                        <input 
+                            type="text" 
+                            id="nome" 
+                            name="nome" 
+                            placeholder="Digite o nome..."
+                        >
+                    </div>
+                    <div class="form-group">
+                        <label for="unidade">Unidade:</label>
+                        <input 
+                            type="text" 
+                            id="unidade" 
+                            name="unidade" 
+                            placeholder="Digite a unidade..."
+                        >
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="vendedor">Vendedor da Rota:</label>
+                        <input 
+                            type="text" 
+                            id="vendedor" 
+                            name="vendedor" 
+                            placeholder="Digite o vendedor da rota..."
+                        >
+                    </div>
+                    <div class="form-group" style="grid-column: span 2;">
+                        <label for="comentarios">Comentários:</label>
+                        <textarea 
+                            id="comentarios" 
+                            name="comentarios" 
+                            placeholder="Digite os comentários..."
+                        ></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                    ➕ Adicionar Agendamento
+                </button>
+            </form>
+        </div>
+
+        <div class="list-section">
+            <h2>📋 Lista de Agendamentos</h2>
+            <div id="eventsList" class="events-list">
+                <!-- Os eventos serão renderizados aqui dinamicamente -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // CONFIGURAÇÃO DO FIREBASE
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyD5ezsxITVbDTlsWWjlJH4ZhGkvQ5xeNjI",
+            authDomain: "agenda-de-visitas-7679e.firebaseapp.com",
+            databaseURL: "https://agenda-de-visitas-7679e-default-rtdb.firebaseio.com",
+            projectId: "agenda-de-visitas-7679e",
+            storageBucket: "agenda-de-visitas-7679e.firebasestorage.app",
+            messagingSenderId: "83784197994",
+            appId: "1:83784197994:web:41baa29763fc1ac3bb6713"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        // ============================================
+        // CLASSE PARA GERENCIAR OS AGENDAMENTOS
+        // ============================================
+        class AgendamentoManager {
+            constructor() {
+                this.agendamentoEditando = null;
+                this.agendamentos = [];
+                this.configurarFormulario();
+                this.carregarAgendamentos();
+            }
+
+            // Carregar agendamentos do Firebase
+            carregarAgendamentos() {
+                const agendamentosRef = database.ref('agendamentos');
+                
+                agendamentosRef.on('value', (snapshot) => {
+                    const dados = snapshot.val();
+                    this.agendamentos = dados ? Object.keys(dados).map(key => ({
+                        id: key,
+                        ...dados[key]
+                    })) : [];
+                    this.renderizarLista();
+                });
+            }
+
+            // Adicionar novo agendamento
+            adicionarAgendamento(data, nome = '', unidade = '', vendedor = '', comentarios = '') {
+                const novoAgendamento = {
+                    data: data,
+                    nome: nome,
+                    unidade: unidade,
+                    vendedor: vendedor,
+                    comentarios: comentarios,
+                    status: 'Aguardando',
+                    dataCriacao: new Date().toISOString()
+                };
+
+                database.ref('agendamentos').push(novoAgendamento)
+                    .then(() => {
+                        console.log('Agendamento adicionado com sucesso!');
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao adicionar agendamento:', error);
+                        alert('Erro ao adicionar agendamento. Tente novamente.');
+                    });
+            }
+
+            // Atualizar status de um agendamento
+            atualizarStatus(id, novoStatus) {
+                database.ref(`agendamentos/${id}/status`).set(novoStatus)
+                    .catch((error) => {
+                        console.error('Erro ao atualizar status:', error);
+                        alert('Erro ao atualizar status. Tente novamente.');
+                    });
+            }
+
+            // Atualizar todos os campos de um agendamento
+            atualizarAgendamento(id, dados) {
+                const updates = {};
+                Object.keys(dados).forEach(campo => {
+                    updates[`agendamentos/${id}/${campo}`] = dados[campo];
+                });
+
+                database.ref().update(updates)
+                    .then(() => {
+                        this.agendamentoEditando = null;
+                    })
+                    .catch((error) => {
+                        console.error('Erro ao atualizar agendamento:', error);
+                        alert('Erro ao atualizar agendamento. Tente novamente.');
+                    });
+            }
+
+            // Iniciar modo de edição
+            iniciarEdicao(id) {
+                this.agendamentoEditando = id;
+                this.renderizarLista();
+            }
+
+            // Cancelar edição
+            cancelarEdicao() {
+                this.agendamentoEditando = null;
+                this.renderizarLista();
+            }
+
+            // Salvar edição
+            salvarEdicao(id) {
+                const nome = document.getElementById(`edit-nome-${id}`).value.trim();
+                const unidade = document.getElementById(`edit-unidade-${id}`).value.trim();
+                const vendedor = document.getElementById(`edit-vendedor-${id}`).value.trim();
+                const comentarios = document.getElementById(`edit-comentarios-${id}`).value.trim();
+                const status = document.getElementById(`status-${id}`).value;
+
+                this.atualizarAgendamento(id, {
+                    nome: nome,
+                    unidade: unidade,
+                    vendedor: vendedor,
+                    comentarios: comentarios,
+                    status: status
+                });
+            }
+
+            // Remover agendamento
+            removerAgendamento(id) {
+                if (confirm('Tem certeza que deseja remover este agendamento?')) {
+                    database.ref(`agendamentos/${id}`).remove()
+                        .catch((error) => {
+                            console.error('Erro ao remover agendamento:', error);
+                            alert('Erro ao remover agendamento. Tente novamente.');
+                        });
+                }
+            }
+
+            // Formatar data para exibição
+            formatarData(dataString) {
+                const data = new Date(dataString + 'T00:00:00');
+                const opcoes = { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric'
+                };
+                return data.toLocaleDateString('pt-BR', opcoes);
+            }
+
+            // Formatar data curta
+            formatarDataCurta(dataString) {
+                const data = new Date(dataString + 'T00:00:00');
+                const opcoes = { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric'
+                };
+                return data.toLocaleDateString('pt-BR', opcoes);
+            }
+
+            // Renderizar lista de agendamentos
+            renderizarLista() {
+                const container = document.getElementById('eventsList');
+                
+                if (this.agendamentos.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                            <p>Nenhum agendamento cadastrado ainda.</p>
+                            <p style="margin-top: 10px; font-size: 0.9rem;">Adicione um novo agendamento usando o formulário acima.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Ordenar agendamentos por data (mais recentes primeiro)
+                const agendamentosOrdenados = [...this.agendamentos].sort((a, b) => {
+                    return new Date(b.data) - new Date(a.data);
+                });
+
+                let html = `
+                    <table class="events-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Nome</th>
+                                <th>Unidade</th>
+                                <th>Vendedor da Rota</th>
+                                <th>Comentários</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                agendamentosOrdenados.forEach(agendamento => {
+                    const dataFormatada = this.formatarDataCurta(agendamento.data);
+                    const classeStatus = `status-${agendamento.status.toLowerCase()}`;
+                    const emEdicao = this.agendamentoEditando === agendamento.id;
+                    
+                    if (emEdicao) {
+                        // Modo de edição
+                        html += `
+                            <tr class="editing-row">
+                                <td>${dataFormatada}</td>
+                                <td>
+                                    <input 
+                                        type="text" 
+                                        class="table-input"
+                                        id="edit-nome-${agendamento.id}"
+                                        value="${this.escapeHtml(agendamento.nome || '')}" 
+                                        placeholder="Nome..."
+                                    >
+                                </td>
+                                <td>
+                                    <input 
+                                        type="text" 
+                                        class="table-input"
+                                        id="edit-unidade-${agendamento.id}"
+                                        value="${this.escapeHtml(agendamento.unidade || '')}" 
+                                        placeholder="Unidade..."
+                                    >
+                                </td>
+                                <td>
+                                    <input 
+                                        type="text" 
+                                        class="table-input"
+                                        id="edit-vendedor-${agendamento.id}"
+                                        value="${this.escapeHtml(agendamento.vendedor || '')}" 
+                                        placeholder="Vendedor..."
+                                    >
+                                </td>
+                                <td>
+                                    <textarea 
+                                        class="table-textarea"
+                                        id="edit-comentarios-${agendamento.id}"
+                                        placeholder="Comentários..."
+                                    >${this.escapeHtml(agendamento.comentarios || '')}</textarea>
+                                </td>
+                                <td>
+                                    <select 
+                                        class="status-select" 
+                                        id="status-${agendamento.id}"
+                                        style="font-size: 0.8rem; padding: 4px 6px;"
+                                    >
+                                        <option value="Aguardando" ${agendamento.status === 'Aguardando' ? 'selected' : ''}>Aguardando</option>
+                                        <option value="Concluído" ${agendamento.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
+                                        <option value="Cancelado" ${agendamento.status === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <div class="table-actions">
+                                        <button 
+                                            class="btn-save" 
+                                            onclick="agendamentoManager.salvarEdicao('${agendamento.id}')"
+                                            title="Salvar"
+                                            style="padding: 4px 8px; font-size: 0.7rem;"
+                                        >
+                                            💾
+                                        </button>
+                                        <button 
+                                            class="btn-cancel" 
+                                            onclick="agendamentoManager.cancelarEdicao()"
+                                            title="Cancelar"
+                                            style="padding: 4px 8px; font-size: 0.7rem;"
+                                        >
+                                            ✖️
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    } else {
+                        // Modo de leitura
+                        html += `
+                            <tr>
+                                <td>${dataFormatada}</td>
+                                <td>${this.escapeHtml(agendamento.nome || '-')}</td>
+                                <td>${this.escapeHtml(agendamento.unidade || '-')}</td>
+                                <td>${this.escapeHtml(agendamento.vendedor || '-')}</td>
+                                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${this.escapeHtml(agendamento.comentarios || '')}">
+                                    ${this.escapeHtml(agendamento.comentarios || '-')}
+                                </td>
+                                <td>
+                                    <span class="event-status ${classeStatus}">${agendamento.status}</span>
+                                </td>
+                                <td>
+                                    <div class="table-actions">
+                                        <select 
+                                            class="status-select" 
+                                            onchange="agendamentoManager.atualizarStatus('${agendamento.id}', this.value)"
+                                            style="font-size: 0.75rem; padding: 4px 6px;"
+                                        >
+                                            <option value="Aguardando" ${agendamento.status === 'Aguardando' ? 'selected' : ''}>Aguardando</option>
+                                            <option value="Concluído" ${agendamento.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
+                                            <option value="Cancelado" ${agendamento.status === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
+                                        </select>
+                                        <button 
+                                            class="btn-edit" 
+                                            onclick="agendamentoManager.iniciarEdicao('${agendamento.id}')"
+                                            title="Editar"
+                                            style="padding: 4px 8px; font-size: 0.7rem;"
+                                        >
+                                            ✏️
+                                        </button>
+                                        <button 
+                                            class="btn-delete" 
+                                            onclick="agendamentoManager.removerAgendamento('${agendamento.id}')"
+                                            title="Excluir"
+                                            style="padding: 4px 8px; font-size: 0.7rem;"
+                                        >
+                                            🗑️
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        `;
+                    }
+                });
+
+                html += `
+                        </tbody>
+                    </table>
+                `;
+
+                container.innerHTML = html;
+            }
+
+            // Escapar HTML para prevenir XSS
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // Configurar formulário
+            configurarFormulario() {
+                const form = document.getElementById('agendamentoForm');
+                const inputData = document.getElementById('dataVisita');
+                
+                // Definir data mínima como hoje
+                const hoje = new Date().toISOString().split('T')[0];
+                inputData.setAttribute('min', hoje);
+
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const data = inputData.value;
+                    const nome = document.getElementById('nome').value.trim();
+                    const unidade = document.getElementById('unidade').value.trim();
+                    const vendedor = document.getElementById('vendedor').value.trim();
+                    const comentarios = document.getElementById('comentarios').value.trim();
+                    
+                    if (!data) {
+                        alert('Por favor, preencha o campo obrigatório (Data).');
+                        return;
+                    }
+
+                    this.adicionarAgendamento(data, nome, unidade, vendedor, comentarios);
+                    
+                    // Limpar formulário
+                    form.reset();
+                    inputData.setAttribute('min', hoje);
+                    
+                    // Scroll suave para o novo item
+                    setTimeout(() => {
+                        window.scrollTo({
+                            top: document.querySelector('.list-section').offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }, 100);
+                });
+            }
+        }
+
+        // Inicializar o sistema quando a página carregar
+        let agendamentoManager;
+        document.addEventListener('DOMContentLoaded', () => {
+            agendamentoManager = new AgendamentoManager();
+        });
+    </script>
+</body>
+</html>
+
