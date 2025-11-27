@@ -1,458 +1,458 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
-    <title>Sistema de Agendamento de Visitas a Campo</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #4a90e2 0%, #1a3a5e 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #4a90e2 0%, #1a3a5e 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-            position: relative;
-        }
-
-        .logo-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .logo-img {
-            max-width: 200px;
-            max-height: 120px;
-            margin-bottom: 10px;
-            object-fit: contain;
-        }
-
-        .tagline {
-            font-size: 0.85rem;
-            font-weight: 600;
-            letter-spacing: 1px;
-            opacity: 0.95;
-            margin-top: 5px;
-        }
-
-        .header h1 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            opacity: 0.9;
-            font-size: 1rem;
-        }
-
-        .form-section {
-            padding: 15px 30px;
-            background: #f8f9fa;
-            border-bottom: 2px solid #e9ecef;
-            max-height: 50vh;
-            overflow-y: auto;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        .form-row.full-width {
-            grid-template-columns: 1fr;
-        }
-
-        .form-group {
-            margin-bottom: 10px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 4px;
-            font-weight: 600;
-            color: #333;
-            font-size: 0.75rem;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 6px 8px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-family: inherit;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #4a90e2;
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 50px;
-        }
-
-        .btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-top: 5px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #4a90e2 0%, #1a3a5e 100%);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-
-        .list-section {
-            padding: 30px;
-        }
-
-        .list-section h2 {
-            margin-bottom: 20px;
-            color: #333;
-            font-size: 1.5rem;
-        }
-
-        .events-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: white;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .events-table thead {
-            background: linear-gradient(135deg, #4a90e2 0%, #1a3a5e 100%);
-            color: white;
-        }
-
-        .events-table th {
-            padding: 12px 8px;
-            text-align: left;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .events-table td {
-            padding: 10px 8px;
-            border-bottom: 1px solid #e0e0e0;
-            font-size: 0.8rem;
-            vertical-align: middle;
-        }
-
-        .events-table tbody tr {
-            transition: background-color 0.2s;
-        }
-
-        .events-table tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .events-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .table-actions {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-            justify-content: flex-start;
-        }
-
-        .table-input {
-            width: 100%;
-            padding: 4px 6px;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-family: inherit;
-        }
-
-        .table-input:focus {
-            outline: none;
-            border-color: #4a90e2;
-        }
-
-        .table-textarea {
-            width: 100%;
-            padding: 4px 6px;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            font-family: inherit;
-            resize: vertical;
-            min-height: 40px;
-        }
-
-        .table-textarea:focus {
-            outline: none;
-            border-color: #4a90e2;
-        }
-
-        .events-list {
-            overflow-x: auto;
-        }
-
-        .event-card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .event-card:hover {
-            transform: translateX(5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .event-fields {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-        }
-
-        .event-fields > .event-field-readonly {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .event-field {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .event-field.full-width {
-            grid-column: 1 / -1;
-        }
-
-        .event-field label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 5px;
-        }
-
-        .event-field input,
-        .event-field textarea {
-            padding: 10px;
-            border: 2px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            font-family: inherit;
-            transition: border-color 0.3s;
-            width: 100%;
-        }
-
-        .event-field input:focus,
-        .event-field textarea:focus {
-            outline: none;
-            border-color: #4a90e2;
-        }
-
-        .event-field textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-
-        .event-field-readonly {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .event-field-readonly.full-width {
-            grid-column: 1 / -1;
-        }
-
-        .event-field-readonly label {
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #555;
-            margin-bottom: 5px;
-        }
-
-        .event-field-readonly .field-value {
-            padding: 10px;
-            background: #f8f9fa;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            font-size: 0.95rem;
-            color: #333;
-            min-height: 40px;
-            display: flex;
-            align-items: center;
-            white-space: pre-wrap;
-        }
-
-        .event-field-readonly .field-value.empty {
-            color: #999;
-            font-style: italic;
-        }
-
-        .btn-edit {
-            background: #4a90e2;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-edit:hover {
-            background: #357abd;
-            transform: scale(1.05);
-        }
-
-        .btn-save {
-            background: #28a745;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-save:hover {
-            background: #218838;
-            transform: scale(1.05);
-        }
-
-        .btn-cancel {
-            background: #6c757d;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .btn-cancel:hover {
-            background: #5a6268;
-            transform: scale(1.05);
-        }
-
-        .events-table tbody tr.editing-row {
-            background-color: #e3f2fd;
-        }
-
-        .event-info {
-            flex: 1;
-        }
-
-        .event-date {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .event-description {
-            color: #666;
-            font-size: 0.95rem;
-            margin-bottom: 10px;
-        }
-
-        .event-status {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 15px;
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .status-aguardando {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffc107;
-        }
-
-        .status-concluido {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #28a745;
-        }
-
-        .status-cancelado {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #dc3545;
-        }
-
-        .event-actions {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-
-        .status-select {
-            padding: 8px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-family: inherit;
-            cursor: pointer;
-            background: white;
-            transition: border-color 0.3s;
-        }
-
-        .status-select:focus {
-            outline: none;
-            border-color: #4a90e2;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+<title>Sistema de Agendamento de Visitas a Campo</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #4a90e2 0%, #1a3a5e 100%);
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        overflow: hidden;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #4a90e2 0%, #1a3a5e 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+    }
+
+    .logo-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .logo-img {
+        max-width: 200px;
+        max-height: 120px;
+        margin-bottom: 10px;
+        object-fit: contain;
+    }
+
+    .tagline {
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 1px;
+        opacity: 0.95;
+        margin-top: 5px;
+    }
+
+    .header h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .header p {
+        opacity: 0.9;
+        font-size: 1rem;
+    }
+
+    .form-section {
+        padding: 15px 30px;
+        background: #f8f9fa;
+        border-bottom: 2px solid #e9ecef;
+        max-height: 50vh;
+        overflow-y: auto;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .form-row.full-width {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group {
+        margin-bottom: 10px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 4px;
+        font-weight: 600;
+        color: #333;
+        font-size: 0.75rem;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 6px 8px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-family: inherit;
+        transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #4a90e2;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 50px;
+    }
+
+    .btn {
+        padding: 8px 20px;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-top: 5px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #4a90e2 0%, #1a3a5e 100%);
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(74, 144, 226, 0.4);
+    }
+
+    .btn-primary:active {
+        transform: translateY(0);
+    }
+
+    .list-section {
+        padding: 30px;
+    }
+
+    .list-section h2 {
+        margin-bottom: 20px;
+        color: #333;
+        font-size: 1.5rem;
+    }
+
+    .events-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .events-table thead {
+        background: linear-gradient(135deg, #4a90e2 0%, #1a3a5e 100%);
+        color: white;
+    }
+
+    .events-table th {
+        padding: 12px 8px;
+        text-align: left;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .events-table td {
+        padding: 10px 8px;
+        border-bottom: 1px solid #e0e0e0;
+        font-size: 0.8rem;
+        vertical-align: middle;
+    }
+
+    .events-table tbody tr {
+        transition: background-color 0.2s;
+    }
+
+    .events-table tbody tr:hover {
+        background-color: #f8f9fa;
+    }
+
+    .events-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    .table-actions {
+        display: flex;
+        gap: 5px;
+        align-items: center;
+        justify-content: flex-start;
+    }
+
+    .table-input {
+        width: 100%;
+        padding: 4px 6px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-family: inherit;
+    }
+
+    .table-input:focus {
+        outline: none;
+        border-color: #4a90e2;
+    }
+
+    .table-textarea {
+        width: 100%;
+        padding: 4px 6px;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-family: inherit;
+        resize: vertical;
+        min-height: 40px;
+    }
+
+    .table-textarea:focus {
+        outline: none;
+        border-color: #4a90e2;
+    }
+
+    .events-list {
+        overflow-x: auto;
+    }
+
+    .event-card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .event-card:hover {
+        transform: translateX(5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .event-fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .event-fields > .event-field-readonly {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-field {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-field.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .event-field label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    .event-field input,
+    .event-field textarea {
+        padding: 10px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        font-family: inherit;
+        transition: border-color 0.3s;
+        width: 100%;
+    }
+
+    .event-field input:focus,
+    .event-field textarea:focus {
+        outline: none;
+        border-color: #4a90e2;
+    }
+
+    .event-field textarea {
+        resize: vertical;
+        min-height: 80px;
+    }
+
+    .event-field-readonly {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event-field-readonly.full-width {
+        grid-column: 1 / -1;
+    }
+
+    .event-field-readonly label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    .event-field-readonly .field-value {
+        padding: 10px;
+        background: #f8f9fa;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        color: #333;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        white-space: pre-wrap;
+    }
+
+    .event-field-readonly .field-value.empty {
+        color: #999;
+        font-style: italic;
+    }
+
+    .btn-edit {
+        background: #4a90e2;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-edit:hover {
+        background: #357abd;
+        transform: scale(1.05);
+    }
+
+    .btn-save {
+        background: #28a745;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-save:hover {
+        background: #218838;
+        transform: scale(1.05);
+    }
+
+    .btn-cancel {
+        background: #6c757d;
+        color: white;
+        padding: 8px 15px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .btn-cancel:hover {
+        background: #5a6268;
+        transform: scale(1.05);
+    }
+
+    .events-table tbody tr.editing-row {
+        background-color: #e3f2fd;
+    }
+
+    .event-info {
+        flex: 1;
+    }
+
+    .event-date {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 8px;
+    }
+
+    .event-description {
+        color: #666;
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+    }
+
+    .event-status {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: 15px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .status-aguardando {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffc107;
+    }
+
+    .status-concluido {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #28a745;
+    }
+
+    .status-cancelado {
+        background: #f8d7da;
+        color: #721c24;
+        border: 1px solid #dc3545;
+    }
+
+    .event-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .status-select {
+        padding: 8px 15px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-family: inherit;
+        cursor: pointer;
+        background: white;
+        transition: border-color 0.3s;
+    }
+
+    .status-select:focus {
+        outline: none;
+        border-color: #4a90e2;
+    }
 
         .btn-delete {
             background: #dc3545;
@@ -642,13 +642,21 @@
 
         // Inicializar Firebase
         let database;
-        try {
-            firebase.initializeApp(firebaseConfig);
-            database = firebase.database();
-            console.log('Firebase inicializado com sucesso!');
-        } catch (error) {
-            console.error('Erro ao inicializar Firebase:', error);
-            alert('Erro ao conectar com o banco de dados. Verifique o console (F12) para mais detalhes.');
+        
+        // Verificar se Firebase está carregado
+        if (typeof firebase === 'undefined') {
+            console.error('Firebase não foi carregado! Verifique a conexão com a internet.');
+            alert('Erro: Firebase não foi carregado. Verifique sua conexão com a internet.');
+        } else {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                database = firebase.database();
+                console.log('Firebase inicializado com sucesso!');
+            } catch (error) {
+                console.error('Erro ao inicializar Firebase:', error);
+                console.error('Detalhes do erro:', error.message, error.code);
+                alert('Erro ao conectar com o banco de dados: ' + error.message);
+            }
         }
 
         // ============================================
@@ -1021,8 +1029,17 @@
         // Inicializar o sistema quando a página carregar
         let agendamentoManager;
         document.addEventListener('DOMContentLoaded', () => {
+            // Verificar se o database foi inicializado
+            if (typeof database === 'undefined' || !database) {
+                console.error('Database não foi inicializado!');
+                alert('Erro: Não foi possível conectar ao banco de dados. Verifique o console (F12) para mais detalhes.');
+                return;
+            }
+            
+            console.log('Inicializando AgendamentoManager...');
             agendamentoManager = new AgendamentoManager();
         });
     </script>
 </body>
 </html>
+
