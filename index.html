@@ -483,6 +483,24 @@
             transform: scale(1.05);
         }
 
+        .btn-link {
+            background: #17a2b8;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-link:hover {
+            background: #138496;
+            transform: scale(1.05);
+        }
+
         .empty-state {
             text-align: center;
             padding: 60px 20px;
@@ -1236,6 +1254,16 @@
                                         >
                                             🗑️
                                         </button>
+                                        <a 
+                                            href="${this.gerarLink(agendamento)}"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            class="btn-link"
+                                            title="Abrir link"
+                                            style="padding: 4px 8px; font-size: 0.7rem;"
+                                        >
+                                            🔗
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
@@ -1263,6 +1291,12 @@
                 if (!vendedorId) return '';
                 const vendedor = dadosListaSuspensa.vendedores.find(v => v.id === vendedorId);
                 return vendedor ? vendedor.nome : '';
+            }
+
+            // Gerar link para o agendamento
+            gerarLink(agendamento) {
+                // Link para o formulário de Pesquisa de Satisfação do Cliente
+                return 'https://forms.gle/jBkZhmU4fKf7r7sU8';
             }
 
             // Escapar HTML para prevenir XSS
