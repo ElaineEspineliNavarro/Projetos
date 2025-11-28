@@ -101,7 +101,8 @@
     }
 
     .form-group input,
-    .form-group textarea {
+    .form-group textarea,
+    .form-group select {
         width: 100%;
         padding: 6px 8px;
         border: 2px solid #e0e0e0;
@@ -109,12 +110,24 @@
         font-size: 0.8rem;
         font-family: inherit;
         transition: border-color 0.3s;
+        background: white;
     }
 
     .form-group input:focus,
-    .form-group textarea:focus {
+    .form-group textarea:focus,
+    .form-group select:focus {
         outline: none;
         border-color: #4a90e2;
+    }
+
+    .form-group select {
+        cursor: pointer;
+    }
+
+    .form-group select:disabled {
+        background: #f5f5f5;
+        cursor: not-allowed;
+        opacity: 0.6;
     }
 
     .form-group textarea {
@@ -582,27 +595,32 @@
                         >
                     </div>
                     <div class="form-group">
-                        <label for="unidade">Unidade:</label>
-                        <input 
-                            type="text" 
-                            id="unidade" 
-                            name="unidade" 
-                            placeholder="Digite a unidade..."
-                        >
+                        <label for="unidade">Unidade: <span style="color: red;">*</span></label>
+                        <select id="unidade" name="unidade" required>
+                            <option value="">Selecione a unidade...</option>
+                        </select>
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="vendedor">Vendedor da Rota:</label>
+                        <label for="vendedor">Vendedor da Rota: <span style="color: red;">*</span></label>
+                        <select id="vendedor" name="vendedor" required disabled>
+                            <option value="">Primeiro selecione a unidade</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="perfilVendedor">Perfil do Vendedor:</label>
                         <input 
                             type="text" 
-                            id="vendedor" 
-                            name="vendedor" 
-                            placeholder="Digite o vendedor da rota..."
+                            id="perfilVendedor" 
+                            name="perfilVendedor" 
+                            placeholder="Será preenchido automaticamente"
+                            readonly
+                            style="background: #f5f5f5;"
                         >
                     </div>
-                    <div class="form-group" style="grid-column: span 2;">
+                    <div class="form-group">
                         <label for="comentarios">Comentários:</label>
                         <textarea 
                             id="comentarios" 
@@ -660,6 +678,238 @@
         }
 
         // ============================================
+        // DADOS DAS LISTAS SUSPENSAS
+        // ============================================
+        let dadosListaSuspensa = {
+            unidades: [],
+            vendedores: []
+        };
+
+        // Dados do JSON embutidos como fallback (caso o arquivo não carregue)
+        const dadosListaSuspensaEmbedded = {
+            "unidades": [
+                {"id": "unidade1", "nome": "BAU"},
+                {"id": "unidade2", "nome": "BTM"},
+                {"id": "unidade3", "nome": "CNT"},
+                {"id": "unidade4", "nome": "CRT"},
+                {"id": "unidade5", "nome": "DCA"},
+                {"id": "unidade6", "nome": "DIT"},
+                {"id": "unidade7", "nome": "DMG"},
+                {"id": "unidade8", "nome": "DPR"},
+                {"id": "unidade9", "nome": "DSP"},
+                {"id": "unidade10", "nome": "GYN"},
+                {"id": "unidade11", "nome": "REC"},
+                {"id": "unidade12", "nome": "RJN"},
+                {"id": "unidade13", "nome": "SFL"},
+                {"id": "unidade14", "nome": "CPG"},
+                {"id": "unidade15", "nome": "MRA"},
+                {"id": "unidade16", "nome": "PVH"},
+                {"id": "unidade17", "nome": "PVH"}
+            ],
+            "vendedores": [
+                {"id": "vendedor1", "nome": "JESSICA PUGGINA DA SILVA", "unidadeId": "unidade1", "perfil": "FOOD"},
+                {"id": "vendedor2", "nome": "VAGNER ANNIBAL SANTANA MATTOS", "unidadeId": "unidade1", "perfil": "MISTO"},
+                {"id": "vendedor3", "nome": "BRUNO GUILHERME DE TILIO", "unidadeId": "unidade1", "perfil": "MISTO"},
+                {"id": "vendedor4", "nome": "ANDRE LUIS SANTINHO", "unidadeId": "unidade2", "perfil": "FOOD"},
+                {"id": "vendedor5", "nome": "JOEL PEREIRA DE OLIVEIRA JUNIOR", "unidadeId": "unidade2", "perfil": "MISTO"},
+                {"id": "vendedor6", "nome": "LUIS FERNANDO MINELLI", "unidadeId": "unidade2", "perfil": "MISTO"},
+                {"id": "vendedor7", "nome": "CATIA FERNANDA DOS SANTOS COSTA", "unidadeId": "unidade3", "perfil": "FOOD"},
+                {"id": "vendedor8", "nome": "FLAVIO JUNIO SANTANA", "unidadeId": "unidade3", "perfil": "MISTO"},
+                {"id": "vendedor9", "nome": "GIZELE MEDEIROS DE OLIVEIRA BATISTA", "unidadeId": "unidade3", "perfil": "MISTO"},
+                {"id": "vendedor10", "nome": "MICHEL PLATINI DE OLIVEIRA", "unidadeId": "unidade4", "perfil": "FOOD"},
+                {"id": "vendedor11", "nome": "ROBERTH DOS SANTOS CASAGRANDE", "unidadeId": "unidade4", "perfil": "MISTO"},
+                {"id": "vendedor12", "nome": "ANDREZA FATIMA DOS SANTOS DE CASSIANO", "unidadeId": "unidade4", "perfil": "MISTO"},
+                {"id": "vendedor13", "nome": "AILTON PEREIRA DE SOUSA", "unidadeId": "unidade5", "perfil": "FOOD"},
+                {"id": "vendedor14", "nome": "ANDRE LUIS DA SILVA CHINI", "unidadeId": "unidade5", "perfil": "MISTO"},
+                {"id": "vendedor15", "nome": "DENIS SETRA DE OLIVEIRA", "unidadeId": "unidade5", "perfil": "MISTO"},
+                {"id": "vendedor16", "nome": "RAFAEL NUNES DOS SANTOS", "unidadeId": "unidade6", "perfil": "FOOD"},
+                {"id": "vendedor17", "nome": "GABRIEL DORNELLES RIHL", "unidadeId": "unidade6", "perfil": "MISTO"},
+                {"id": "vendedor18", "nome": "BRAULIO DILLY", "unidadeId": "unidade6", "perfil": "MISTO"},
+                {"id": "vendedor19", "nome": "JOSENILTON ALVES DA SILVA", "unidadeId": "unidade7", "perfil": "MISTO"},
+                {"id": "vendedor20", "nome": "PABLO ALVES DE MELO OLIVEIRA", "unidadeId": "unidade7", "perfil": "MISTO"},
+                {"id": "vendedor21", "nome": "JOAO BATISTA ALVARENGA ROSA", "unidadeId": "unidade7", "perfil": "MISTO"},
+                {"id": "vendedor22", "nome": "SERGIO DE ANDRADE SOARES", "unidadeId": "unidade8", "perfil": "MISTO"},
+                {"id": "vendedor23", "nome": "OZIEL GONCALVES DOS SANTOS", "unidadeId": "unidade8", "perfil": "MISTO"},
+                {"id": "vendedor24", "nome": "EVELYN DAVATZ DE OLIVEIRA LIMA DA SILVA", "unidadeId": "unidade8", "perfil": "MISTO"},
+                {"id": "vendedor25", "nome": "ANDRESSA GOBO SOUZA", "unidadeId": "unidade9", "perfil": "FOOD"},
+                {"id": "vendedor26", "nome": "CELDINEI ARAUJO DA SILVA", "unidadeId": "unidade9", "perfil": "MISTO"},
+                {"id": "vendedor27", "nome": "RODOLPHO CHIESI DA SILVA", "unidadeId": "unidade9", "perfil": "MISTO"},
+                {"id": "vendedor28", "nome": "DIEGO ALVES ROCHA", "unidadeId": "unidade10", "perfil": "FOOD"},
+                {"id": "vendedor29", "nome": "IVANILDO CONCEICAO ROCHA", "unidadeId": "unidade10", "perfil": "VAREJO DE PLANTA"},
+                {"id": "vendedor30", "nome": "WARLEY DE OLIVEIRA DUTRA", "unidadeId": "unidade10", "perfil": "VAREJO DE PLANTA"},
+                {"id": "vendedor31", "nome": "YVISON KAUAN DA SILVA", "unidadeId": "unidade11", "perfil": "FOOD"},
+                {"id": "vendedor32", "nome": "MARIA EDLANE LOPES DOS SANTOS", "unidadeId": "unidade11", "perfil": "MISTO"},
+                {"id": "vendedor33", "nome": "EDILSON VICENTE BATISTA", "unidadeId": "unidade11", "perfil": "MISTO"},
+                {"id": "vendedor34", "nome": "ANTONIO CARLOS MACIEL DA COSTA JUNIOR", "unidadeId": "unidade12", "perfil": "FOOD"},
+                {"id": "vendedor35", "nome": "SABRINA DA SILVA ROSENDO DE AGUIAR", "unidadeId": "unidade12", "perfil": "MISTO"},
+                {"id": "vendedor36", "nome": "LEONARDO PEREIRA DE SOUZA", "unidadeId": "unidade12", "perfil": "MISTO"},
+                {"id": "vendedor37", "nome": "GABRIEL REBOUCAS ESMERA DOS SANTOS", "unidadeId": "unidade13", "perfil": "FOOD"},
+                {"id": "vendedor38", "nome": "RICARDO MAGALHAES DE CARVALHO", "unidadeId": "unidade13", "perfil": "MISTO"},
+                {"id": "vendedor39", "nome": "JADIVAL ALMEIDA DA SILVA", "unidadeId": "unidade13", "perfil": "MISTO"},
+                {"id": "vendedor40", "nome": "GETULIO DE OLIVEIRA JUNIOR", "unidadeId": "unidade14", "perfil": "FOOD"},
+                {"id": "vendedor41", "nome": "GUILHERME FERREIRA TARGINO", "unidadeId": "unidade14", "perfil": "MISTO"},
+                {"id": "vendedor42", "nome": "DJAIR JUNIOR NASCIMENTO LOPES ROLIN", "unidadeId": "unidade14", "perfil": "MISTO"},
+                {"id": "vendedor43", "nome": "FRANCISCO CRISANLEUSON BEZERRA DA SILVA", "unidadeId": "unidade15", "perfil": "FOOD"},
+                {"id": "vendedor44", "nome": "JOAO FRANCISCO PEREIRA COSTA", "unidadeId": "unidade15", "perfil": "MISTO"},
+                {"id": "vendedor45", "nome": "PAULO HENRIQUE DO NASCIMENTO SILVA", "unidadeId": "unidade15", "perfil": "MISTO"},
+                {"id": "vendedor46", "nome": "MARIO BETUCCI NETO", "unidadeId": "unidade16", "perfil": "FOOD"},
+                {"id": "vendedor47", "nome": "KELITON VIANA GARCIA", "unidadeId": "unidade16", "perfil": "VAREJO DE PLANTA"},
+                {"id": "vendedor48", "nome": "CRISTIANO ALVES DE BARROS", "unidadeId": "unidade16", "perfil": "VAREJO DE PLANTA"}
+            ]
+        };
+
+        // Carregar dados do JSON
+        async function carregarDadosListaSuspensa() {
+            // PRIMEIRO: Sempre usar dados embutidos para garantir funcionamento
+            dadosListaSuspensa = JSON.parse(JSON.stringify(dadosListaSuspensaEmbedded));
+            console.log('✅ Dados embutidos carregados (garantindo funcionamento)');
+            console.log(`📊 ${dadosListaSuspensa.unidades.length} unidades disponíveis`);
+            console.log(`👥 ${dadosListaSuspensa.vendedores.length} vendedores disponíveis`);
+            console.log('📋 Primeira unidade:', dadosListaSuspensa.unidades[0]?.nome);
+            console.log('👤 Primeiro vendedor:', dadosListaSuspensa.vendedores[0]?.nome);
+            
+            // Inicializar dropdowns imediatamente com dados embutidos
+            inicializarDropdowns();
+            
+            // DEPOIS: Tentar atualizar do arquivo (opcional, não bloqueia)
+            try {
+                console.log('🔄 Tentando atualizar com dados-lista-suspensa.json...');
+                const response = await fetch('dados-lista-suspensa.json', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    cache: 'no-cache'
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+                }
+                
+                const dados = await response.json();
+                
+                // Validar estrutura dos dados
+                if (!dados.unidades || !Array.isArray(dados.unidades)) {
+                    throw new Error('Estrutura de dados inválida: campo "unidades" não encontrado');
+                }
+                if (!dados.vendedores || !Array.isArray(dados.vendedores)) {
+                    throw new Error('Estrutura de dados inválida: campo "vendedores" não encontrado');
+                }
+                
+                // Atualizar com dados do arquivo
+                dadosListaSuspensa = dados;
+                console.log('✅ Dados atualizados do arquivo JSON!');
+                console.log(`📊 ${dadosListaSuspensa.unidades.length} unidades no arquivo`);
+                console.log(`👥 ${dadosListaSuspensa.vendedores.length} vendedores no arquivo`);
+                
+                // Reinicializar dropdowns com dados atualizados
+                inicializarDropdowns();
+            } catch (error) {
+                console.warn('⚠️ Não foi possível carregar dados-lista-suspensa.json');
+                console.warn('📝 Continuando com dados embutidos (já carregados)');
+                console.warn('💡 Dica: Para usar o arquivo JSON, abra via servidor local');
+            }
+        }
+
+        // Funções para gerenciar dropdowns
+        let handlerUnidade = null;
+        let handlerVendedor = null;
+
+        // Inicializar dropdowns
+        function inicializarDropdowns() {
+            const selectUnidade = document.getElementById('unidade');
+            const selectVendedor = document.getElementById('vendedor');
+            
+            if (!selectUnidade || !selectVendedor) {
+                console.error('Elementos do formulário não encontrados!');
+                return;
+            }
+            
+            // Verificar se os dados foram carregados
+            if (!dadosListaSuspensa || !dadosListaSuspensa.unidades || dadosListaSuspensa.unidades.length === 0) {
+                console.error('Dados das listas suspensas não foram carregados!');
+                return;
+            }
+            
+            // Limpar opções existentes
+            selectUnidade.innerHTML = '<option value="">Selecione a unidade...</option>';
+            selectVendedor.innerHTML = '<option value="">Primeiro selecione a unidade</option>';
+            selectVendedor.disabled = true;
+            
+            // Preencher dropdown de unidades com dados do JSON
+            dadosListaSuspensa.unidades.forEach(unidade => {
+                const option = document.createElement('option');
+                option.value = unidade.id;
+                option.textContent = unidade.nome;
+                selectUnidade.appendChild(option);
+            });
+
+            console.log(`✅ Dropdown de unidades preenchido com ${dadosListaSuspensa.unidades.length} unidades`);
+
+            // Remover listeners antigos se existirem
+            if (handlerUnidade) {
+                selectUnidade.removeEventListener('change', handlerUnidade);
+            }
+            if (handlerVendedor) {
+                selectVendedor.removeEventListener('change', handlerVendedor);
+            }
+
+            // Event listener para mudança de unidade
+            handlerUnidade = function() {
+                const unidadeId = this.value;
+                const selectVendedor = document.getElementById('vendedor');
+                const inputPerfil = document.getElementById('perfilVendedor');
+                
+                // Limpar vendedor e perfil
+                selectVendedor.innerHTML = '<option value="">Selecione o vendedor...</option>';
+                selectVendedor.disabled = !unidadeId;
+                if (inputPerfil) inputPerfil.value = '';
+                
+                if (unidadeId) {
+                    // Filtrar vendedores da unidade selecionada usando dados do JSON
+                    const vendedoresFiltrados = dadosListaSuspensa.vendedores.filter(
+                        v => v.unidadeId === unidadeId
+                    );
+                    
+                    console.log(`📋 Vendedores encontrados para unidade ${unidadeId}: ${vendedoresFiltrados.length}`);
+                    
+                    if (vendedoresFiltrados.length === 0) {
+                        selectVendedor.innerHTML = '<option value="">Nenhum vendedor encontrado para esta unidade</option>';
+                        selectVendedor.disabled = true;
+                    } else {
+                        vendedoresFiltrados.forEach(vendedor => {
+                            const option = document.createElement('option');
+                            option.value = vendedor.id;
+                            option.textContent = vendedor.nome;
+                            option.dataset.perfil = vendedor.perfil || '';
+                            selectVendedor.appendChild(option);
+                        });
+                        selectVendedor.disabled = false;
+                    }
+                }
+            };
+
+            // Event listener para mudança de vendedor
+            handlerVendedor = function() {
+                const selectedOption = this.options[this.selectedIndex];
+                const inputPerfil = document.getElementById('perfilVendedor');
+                
+                if (selectedOption && selectedOption.dataset.perfil && inputPerfil) {
+                    inputPerfil.value = selectedOption.dataset.perfil;
+                    console.log(`✅ Perfil preenchido automaticamente: ${selectedOption.dataset.perfil}`);
+                } else if (inputPerfil) {
+                    inputPerfil.value = '';
+                }
+            };
+
+            // Adicionar listeners
+            selectUnidade.addEventListener('change', handlerUnidade);
+            selectVendedor.addEventListener('change', handlerVendedor);
+            
+            console.log('✅ Dropdowns inicializados com sucesso usando dados do JSON!');
+        }
+
+        // ============================================
         // CLASSE PARA GERENCIAR OS AGENDAMENTOS
         // ============================================
         class AgendamentoManager {
@@ -694,12 +944,19 @@
             }
 
             // Adicionar novo agendamento
-            adicionarAgendamento(data, nome = '', unidade = '', vendedor = '', comentarios = '') {
+            adicionarAgendamento(data, nome = '', unidade = '', vendedor = '', perfilVendedor = '', comentarios = '') {
+                // Buscar nomes dos valores selecionados
+                const unidadeNome = this.obterNomeUnidade(unidade);
+                const vendedorNome = this.obterNomeVendedor(vendedor);
+                
                 const novoAgendamento = {
                     data: data,
                     nome: nome,
-                    unidade: unidade,
-                    vendedor: vendedor,
+                    unidade: unidadeNome || unidade,
+                    unidadeId: unidade,
+                    vendedor: vendedorNome || vendedor,
+                    vendedorId: vendedor,
+                    perfilVendedor: perfilVendedor,
                     comentarios: comentarios,
                     status: 'Aguardando',
                     dataCriacao: new Date().toISOString()
@@ -763,6 +1020,7 @@
                 const nome = document.getElementById(`edit-nome-${id}`).value.trim();
                 const unidade = document.getElementById(`edit-unidade-${id}`).value.trim();
                 const vendedor = document.getElementById(`edit-vendedor-${id}`).value.trim();
+                const perfilVendedor = document.getElementById(`edit-perfilVendedor-${id}`).value.trim();
                 const comentarios = document.getElementById(`edit-comentarios-${id}`).value.trim();
                 const status = document.getElementById(`status-${id}`).value;
 
@@ -770,6 +1028,7 @@
                     nome: nome,
                     unidade: unidade,
                     vendedor: vendedor,
+                    perfilVendedor: perfilVendedor,
                     comentarios: comentarios,
                     status: status
                 });
@@ -838,6 +1097,7 @@
                                 <th>Nome</th>
                                 <th>Unidade</th>
                                 <th>Vendedor da Rota</th>
+                                <th>Perfil do Vendedor</th>
                                 <th>Comentários</th>
                                 <th>Status</th>
                                 <th>Ações</th>
@@ -881,6 +1141,17 @@
                                         id="edit-vendedor-${agendamento.id}"
                                         value="${this.escapeHtml(agendamento.vendedor || '')}" 
                                         placeholder="Vendedor..."
+                                    >
+                                </td>
+                                <td>
+                                    <input 
+                                        type="text" 
+                                        class="table-input"
+                                        id="edit-perfilVendedor-${agendamento.id}"
+                                        value="${this.escapeHtml(agendamento.perfilVendedor || '')}" 
+                                        placeholder="Perfil..."
+                                        readonly
+                                        style="background: #f5f5f5;"
                                     >
                                 </td>
                                 <td>
@@ -931,6 +1202,7 @@
                                 <td>${this.escapeHtml(agendamento.nome || '-')}</td>
                                 <td>${this.escapeHtml(agendamento.unidade || '-')}</td>
                                 <td>${this.escapeHtml(agendamento.vendedor || '-')}</td>
+                                <td>${this.escapeHtml(agendamento.perfilVendedor || '-')}</td>
                                 <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${this.escapeHtml(agendamento.comentarios || '')}">
                                     ${this.escapeHtml(agendamento.comentarios || '-')}
                                 </td>
@@ -979,6 +1251,20 @@
                 container.innerHTML = html;
             }
 
+            // Obter nome da unidade pelo ID
+            obterNomeUnidade(unidadeId) {
+                if (!unidadeId) return '';
+                const unidade = dadosListaSuspensa.unidades.find(u => u.id === unidadeId);
+                return unidade ? unidade.nome : '';
+            }
+
+            // Obter nome do vendedor pelo ID
+            obterNomeVendedor(vendedorId) {
+                if (!vendedorId) return '';
+                const vendedor = dadosListaSuspensa.vendedores.find(v => v.id === vendedorId);
+                return vendedor ? vendedor.nome : '';
+            }
+
             // Escapar HTML para prevenir XSS
             escapeHtml(text) {
                 const div = document.createElement('div');
@@ -1002,6 +1288,7 @@
                     const nome = document.getElementById('nome').value.trim();
                     const unidade = document.getElementById('unidade').value.trim();
                     const vendedor = document.getElementById('vendedor').value.trim();
+                    const perfilVendedor = document.getElementById('perfilVendedor').value.trim();
                     const comentarios = document.getElementById('comentarios').value.trim();
                     
                     if (!data) {
@@ -1009,11 +1296,37 @@
                         return;
                     }
 
-                    this.adicionarAgendamento(data, nome, unidade, vendedor, comentarios);
+                    if (!unidade) {
+                        alert('Por favor, selecione a unidade.');
+                        return;
+                    }
+
+                    if (!vendedor) {
+                        alert('Por favor, selecione o vendedor da rota.');
+                        return;
+                    }
+
+                    this.adicionarAgendamento(data, nome, unidade, vendedor, perfilVendedor, comentarios);
                     
                     // Limpar formulário
                     form.reset();
                     inputData.setAttribute('min', hoje);
+                    
+                    // Resetar dropdowns
+                    const selectUnidade = document.getElementById('unidade');
+                    const selectVendedor = document.getElementById('vendedor');
+                    const inputPerfil = document.getElementById('perfilVendedor');
+                    
+                    if (selectUnidade) {
+                        selectUnidade.value = '';
+                    }
+                    if (selectVendedor) {
+                        selectVendedor.innerHTML = '<option value="">Primeiro selecione a unidade</option>';
+                        selectVendedor.disabled = true;
+                    }
+                    if (inputPerfil) {
+                        inputPerfil.value = '';
+                    }
                     
                     // Scroll suave para o novo item
                     setTimeout(() => {
@@ -1028,13 +1341,17 @@
 
         // Inicializar o sistema quando a página carregar
         let agendamentoManager;
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             // Verificar se o database foi inicializado
             if (typeof database === 'undefined' || !database) {
                 console.error('Database não foi inicializado!');
                 alert('Erro: Não foi possível conectar ao banco de dados. Verifique o console (F12) para mais detalhes.');
                 return;
             }
+            
+            // Carregar dados das listas suspensas primeiro
+            console.log('Carregando dados das listas suspensas...');
+            await carregarDadosListaSuspensa();
             
             console.log('Inicializando AgendamentoManager...');
             agendamentoManager = new AgendamentoManager();
