@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+       <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -75,6 +75,8 @@
         border-bottom: 2px solid #e9ecef;
         max-height: 50vh;
         overflow-y: auto;
+        overflow-x: visible;
+        position: relative;
     }
 
     .form-row {
@@ -122,12 +124,9 @@
 
     .form-group select {
         cursor: pointer;
-    }
-
-    .form-group select:disabled {
-        background: #f5f5f5;
-        cursor: not-allowed;
-        opacity: 0.6;
+        -webkit-appearance: menulist;
+        -moz-appearance: menulist;
+        appearance: menulist;
     }
 
     .form-group textarea {
@@ -198,388 +197,165 @@
     .events-table td {
         padding: 10px 8px;
         border-bottom: 1px solid #e0e0e0;
-        font-size: 0.8rem;
-        vertical-align: middle;
-    }
-
-    .events-table tbody tr {
-        transition: background-color 0.2s;
+        font-size: 0.85rem;
     }
 
     .events-table tbody tr:hover {
-        background-color: #f8f9fa;
+        background: #f8f9fa;
     }
 
     .events-table tbody tr:last-child td {
         border-bottom: none;
     }
 
-    .table-actions {
-        display: flex;
-        gap: 5px;
-        align-items: center;
-        justify-content: flex-start;
-    }
-
-    .table-input {
-        width: 100%;
-        padding: 4px 6px;
-        border: 1px solid #e0e0e0;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        font-family: inherit;
-    }
-
-    .table-input:focus {
-        outline: none;
-        border-color: #4a90e2;
-    }
-
-    .table-textarea {
-        width: 100%;
-        padding: 4px 6px;
-        border: 1px solid #e0e0e0;
-        border-radius: 4px;
-        font-size: 0.8rem;
-        font-family: inherit;
-        resize: vertical;
-        min-height: 40px;
-    }
-
-    .table-textarea:focus {
-        outline: none;
-        border-color: #4a90e2;
-    }
-
-    .events-list {
-        overflow-x: auto;
-    }
-
-    .event-card-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .event-card:hover {
-        transform: translateX(5px);
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-
-    .event-fields {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 15px;
-    }
-
-    .event-fields > .event-field-readonly {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .event-field {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .event-field.full-width {
-        grid-column: 1 / -1;
-    }
-
-    .event-field label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #555;
-        margin-bottom: 5px;
-    }
-
-    .event-field input,
-    .event-field textarea {
-        padding: 10px;
-        border: 2px solid #e0e0e0;
-        border-radius: 6px;
-        font-size: 0.95rem;
-        font-family: inherit;
-        transition: border-color 0.3s;
-        width: 100%;
-    }
-
-    .event-field input:focus,
-    .event-field textarea:focus {
-        outline: none;
-        border-color: #4a90e2;
-    }
-
-    .event-field textarea {
-        resize: vertical;
-        min-height: 80px;
-    }
-
-    .event-field-readonly {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .event-field-readonly.full-width {
-        grid-column: 1 / -1;
-    }
-
-    .event-field-readonly label {
-        font-size: 0.85rem;
-        font-weight: 600;
-        color: #555;
-        margin-bottom: 5px;
-    }
-
-    .event-field-readonly .field-value {
-        padding: 10px;
-        background: #f8f9fa;
-        border: 1px solid #e0e0e0;
-        border-radius: 6px;
-        font-size: 0.95rem;
-        color: #333;
-        min-height: 40px;
-        display: flex;
-        align-items: center;
-        white-space: pre-wrap;
-    }
-
-    .event-field-readonly .field-value.empty {
-        color: #999;
-        font-style: italic;
-    }
-
-    .btn-edit {
-        background: #4a90e2;
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-
-    .btn-edit:hover {
-        background: #357abd;
-        transform: scale(1.05);
-    }
-
-    .btn-save {
-        background: #28a745;
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-
-    .btn-save:hover {
-        background: #218838;
-        transform: scale(1.05);
-    }
-
-    .btn-cancel {
-        background: #6c757d;
-        color: white;
-        padding: 8px 15px;
-        border: none;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-
-    .btn-cancel:hover {
-        background: #5a6268;
-        transform: scale(1.05);
-    }
-
-    .events-table tbody tr.editing-row {
-        background-color: #e3f2fd;
-    }
-
-    .event-info {
-        flex: 1;
-    }
-
-    .event-date {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #333;
-        margin-bottom: 8px;
-    }
-
-    .event-description {
-        color: #666;
-        font-size: 0.95rem;
-        margin-bottom: 10px;
-    }
-
-    .event-status {
-        display: inline-block;
-        padding: 3px 10px;
-        border-radius: 15px;
-        font-size: 0.7rem;
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.75rem;
         font-weight: 600;
         text-transform: uppercase;
+        display: inline-block;
     }
 
-    .status-aguardando {
+    .status-pendente {
         background: #fff3cd;
         color: #856404;
-        border: 1px solid #ffc107;
     }
 
     .status-concluido {
         background: #d4edda;
         color: #155724;
-        border: 1px solid #28a745;
     }
 
     .status-cancelado {
         background: #f8d7da;
         color: #721c24;
-        border: 1px solid #dc3545;
     }
 
-    .event-actions {
+    .table-actions {
         display: flex;
-        gap: 10px;
-        align-items: center;
+        gap: 5px;
+        flex-wrap: wrap;
     }
 
-    .status-select {
-        padding: 8px 15px;
-        border: 2px solid #e0e0e0;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        font-family: inherit;
+    .btn-small {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+        border: none;
+        border-radius: 4px;
         cursor: pointer;
-        background: white;
-        transition: border-color 0.3s;
+        transition: all 0.2s;
+        font-weight: 600;
     }
 
-    .status-select:focus {
-        outline: none;
-        border-color: #4a90e2;
+    .btn-edit {
+        background: #ffc107;
+        color: #000;
     }
 
-        .btn-delete {
-            background: #dc3545;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
+    .btn-edit:hover {
+        background: #e0a800;
+    }
+
+    .btn-save {
+        background: #28a745;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background: #218838;
+    }
+
+    .btn-cancel {
+        background: #6c757d;
+        color: white;
+    }
+
+    .btn-cancel:hover {
+        background: #5a6268;
+    }
+
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+    }
+
+    .btn-delete:hover {
+        background: #c82333;
+    }
+
+    .btn-status {
+        background: #17a2b8;
+        color: white;
+    }
+
+    .btn-status:hover {
+        background: #138496;
+    }
+
+    .table-input,
+    .table-textarea {
+        width: 100%;
+        padding: 4px 6px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        font-family: inherit;
+    }
+
+    .table-textarea {
+        resize: vertical;
+        min-height: 40px;
+    }
+
+    .editing-row {
+        background: #fff9e6 !important;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        color: #6c757d;
+    }
+
+    .empty-state svg {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 20px;
+        opacity: 0.5;
+    }
+
+    .empty-state p {
+        font-size: 1.1rem;
+        margin: 10px 0;
+    }
+
+    @media (max-width: 768px) {
+        .form-row {
+            grid-template-columns: 1fr;
         }
 
-        .btn-delete:hover {
-            background: #c82333;
-            transform: scale(1.05);
+        .events-table {
+            font-size: 0.7rem;
         }
 
-        .btn-link {
-            background: #17a2b8;
-            color: white;
-            padding: 8px 15px;
-            border: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
+        .events-table th,
+        .events-table td {
+            padding: 8px 4px;
+            font-size: 0.7rem;
         }
 
-        .btn-link:hover {
-            background: #138496;
-            transform: scale(1.05);
+        .table-actions {
+            flex-wrap: wrap;
+            gap: 3px;
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #999;
+        .events-table {
+            display: block;
+            overflow-x: auto;
         }
-
-        .empty-state svg {
-            width: 100px;
-            height: 100px;
-            margin-bottom: 20px;
-            opacity: 0.5;
-        }
-
-        .empty-state p {
-            font-size: 1.1rem;
-        }
-
-        .logo-fiex {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            font-size: 3.5rem;
-            font-weight: bold;
-            font-family: 'Brush Script MT', cursive, sans-serif;
-        }
-
-        .logo-f {
-            color: #ff0000;
-            font-size: 4rem;
-        }
-
-        .logo-iex {
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.5rem;
-            }
-
-            .logo-img {
-                max-width: 150px;
-                max-height: 80px;
-            }
-
-            .logo-fiex {
-                font-size: 2.5rem;
-            }
-
-            .logo-f {
-                font-size: 3rem;
-            }
-
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-
-            .events-table {
-                font-size: 0.7rem;
-            }
-
-            .events-table th,
-            .events-table td {
-                padding: 8px 4px;
-                font-size: 0.7rem;
-            }
-
-            .table-actions {
-                flex-wrap: wrap;
-                gap: 3px;
-            }
-
-            .events-table {
-                display: block;
-                overflow-x: auto;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 <body>
     <div class="container">
@@ -622,10 +398,13 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="vendedor">Vendedor da Rota: <span style="color: red;">*</span></label>
-                        <select id="vendedor" name="vendedor" required disabled>
-                            <option value="">Primeiro selecione a unidade</option>
-                        </select>
+                        <label for="vendedor">Vendedor da Rota:</label>
+                        <input 
+                            type="text" 
+                            id="vendedor" 
+                            name="vendedor" 
+                            placeholder="Digite o nome do vendedor..."
+                        >
                     </div>
                     <div class="form-group">
                         <label for="perfilVendedor">Perfil do Vendedor:</label>
@@ -633,9 +412,7 @@
                             type="text" 
                             id="perfilVendedor" 
                             name="perfilVendedor" 
-                            placeholder="Será preenchido automaticamente"
-                            readonly
-                            style="background: #f5f5f5;"
+                            placeholder="Digite o perfil do vendedor..."
                         >
                     </div>
                     <div class="form-group">
@@ -679,7 +456,6 @@
         // Inicializar Firebase
         let database;
         
-        // Verificar se Firebase está carregado
         if (typeof firebase === 'undefined') {
             console.error('Firebase não foi carregado! Verifique a conexão com a internet.');
             alert('Erro: Firebase não foi carregado. Verifique sua conexão com a internet.');
@@ -690,338 +466,245 @@
                 console.log('Firebase inicializado com sucesso!');
             } catch (error) {
                 console.error('Erro ao inicializar Firebase:', error);
-                console.error('Detalhes do erro:', error.message, error.code);
                 alert('Erro ao conectar com o banco de dados: ' + error.message);
             }
         }
 
         // ============================================
-        // DADOS DAS LISTAS SUSPENSAS
+        // DADOS DAS UNIDADES
         // ============================================
-        let dadosListaSuspensa = {
-            unidades: [],
-            vendedores: []
-        };
+        let dadosUnidades = [];
 
-        // Dados do JSON embutidos como fallback (caso o arquivo não carregue)
-        const dadosListaSuspensaEmbedded = {
-            "unidades": [
-                {"id": "unidade1", "nome": "BAU"},
-                {"id": "unidade2", "nome": "BTM"},
-                {"id": "unidade3", "nome": "CNT"},
-                {"id": "unidade4", "nome": "CRT"},
-                {"id": "unidade5", "nome": "DCA"},
-                {"id": "unidade6", "nome": "DIT"},
-                {"id": "unidade7", "nome": "DMG"},
-                {"id": "unidade8", "nome": "DPR"},
-                {"id": "unidade9", "nome": "DSP"},
-                {"id": "unidade10", "nome": "GYN"},
-                {"id": "unidade11", "nome": "REC"},
-                {"id": "unidade12", "nome": "RJN"},
-                {"id": "unidade13", "nome": "SFL"},
-                {"id": "unidade14", "nome": "CPG"},
-                {"id": "unidade15", "nome": "MRA"},
-                {"id": "unidade16", "nome": "PVH"},
-                {"id": "unidade17", "nome": "PVH"}
-            ],
-            "vendedores": [
-                {"id": "vendedor1", "nome": "JESSICA PUGGINA DA SILVA", "unidadeId": "unidade1", "perfil": "FOOD"},
-                {"id": "vendedor2", "nome": "VAGNER ANNIBAL SANTANA MATTOS", "unidadeId": "unidade1", "perfil": "MISTO"},
-                {"id": "vendedor3", "nome": "BRUNO GUILHERME DE TILIO", "unidadeId": "unidade1", "perfil": "MISTO"},
-                {"id": "vendedor4", "nome": "ANDRE LUIS SANTINHO", "unidadeId": "unidade2", "perfil": "FOOD"},
-                {"id": "vendedor5", "nome": "JOEL PEREIRA DE OLIVEIRA JUNIOR", "unidadeId": "unidade2", "perfil": "MISTO"},
-                {"id": "vendedor6", "nome": "LUIS FERNANDO MINELLI", "unidadeId": "unidade2", "perfil": "MISTO"},
-                {"id": "vendedor7", "nome": "CATIA FERNANDA DOS SANTOS COSTA", "unidadeId": "unidade3", "perfil": "FOOD"},
-                {"id": "vendedor8", "nome": "FLAVIO JUNIO SANTANA", "unidadeId": "unidade3", "perfil": "MISTO"},
-                {"id": "vendedor9", "nome": "GIZELE MEDEIROS DE OLIVEIRA BATISTA", "unidadeId": "unidade3", "perfil": "MISTO"},
-                {"id": "vendedor10", "nome": "MICHEL PLATINI DE OLIVEIRA", "unidadeId": "unidade4", "perfil": "FOOD"},
-                {"id": "vendedor11", "nome": "ROBERTH DOS SANTOS CASAGRANDE", "unidadeId": "unidade4", "perfil": "MISTO"},
-                {"id": "vendedor12", "nome": "ANDREZA FATIMA DOS SANTOS DE CASSIANO", "unidadeId": "unidade4", "perfil": "MISTO"},
-                {"id": "vendedor13", "nome": "AILTON PEREIRA DE SOUSA", "unidadeId": "unidade5", "perfil": "FOOD"},
-                {"id": "vendedor14", "nome": "ANDRE LUIS DA SILVA CHINI", "unidadeId": "unidade5", "perfil": "MISTO"},
-                {"id": "vendedor15", "nome": "DENIS SETRA DE OLIVEIRA", "unidadeId": "unidade5", "perfil": "MISTO"},
-                {"id": "vendedor16", "nome": "RAFAEL NUNES DOS SANTOS", "unidadeId": "unidade6", "perfil": "FOOD"},
-                {"id": "vendedor17", "nome": "GABRIEL DORNELLES RIHL", "unidadeId": "unidade6", "perfil": "MISTO"},
-                {"id": "vendedor18", "nome": "BRAULIO DILLY", "unidadeId": "unidade6", "perfil": "MISTO"},
-                {"id": "vendedor19", "nome": "JOSENILTON ALVES DA SILVA", "unidadeId": "unidade7", "perfil": "MISTO"},
-                {"id": "vendedor20", "nome": "PABLO ALVES DE MELO OLIVEIRA", "unidadeId": "unidade7", "perfil": "MISTO"},
-                {"id": "vendedor21", "nome": "JOAO BATISTA ALVARENGA ROSA", "unidadeId": "unidade7", "perfil": "MISTO"},
-                {"id": "vendedor22", "nome": "SERGIO DE ANDRADE SOARES", "unidadeId": "unidade8", "perfil": "MISTO"},
-                {"id": "vendedor23", "nome": "OZIEL GONCALVES DOS SANTOS", "unidadeId": "unidade8", "perfil": "MISTO"},
-                {"id": "vendedor24", "nome": "EVELYN DAVATZ DE OLIVEIRA LIMA DA SILVA", "unidadeId": "unidade8", "perfil": "MISTO"},
-                {"id": "vendedor25", "nome": "ANDRESSA GOBO SOUZA", "unidadeId": "unidade9", "perfil": "FOOD"},
-                {"id": "vendedor26", "nome": "CELDINEI ARAUJO DA SILVA", "unidadeId": "unidade9", "perfil": "MISTO"},
-                {"id": "vendedor27", "nome": "RODOLPHO CHIESI DA SILVA", "unidadeId": "unidade9", "perfil": "MISTO"},
-                {"id": "vendedor28", "nome": "DIEGO ALVES ROCHA", "unidadeId": "unidade10", "perfil": "FOOD"},
-                {"id": "vendedor29", "nome": "IVANILDO CONCEICAO ROCHA", "unidadeId": "unidade10", "perfil": "VAREJO DE PLANTA"},
-                {"id": "vendedor30", "nome": "WARLEY DE OLIVEIRA DUTRA", "unidadeId": "unidade10", "perfil": "VAREJO DE PLANTA"},
-                {"id": "vendedor31", "nome": "YVISON KAUAN DA SILVA", "unidadeId": "unidade11", "perfil": "FOOD"},
-                {"id": "vendedor32", "nome": "MARIA EDLANE LOPES DOS SANTOS", "unidadeId": "unidade11", "perfil": "MISTO"},
-                {"id": "vendedor33", "nome": "EDILSON VICENTE BATISTA", "unidadeId": "unidade11", "perfil": "MISTO"},
-                {"id": "vendedor34", "nome": "ANTONIO CARLOS MACIEL DA COSTA JUNIOR", "unidadeId": "unidade12", "perfil": "FOOD"},
-                {"id": "vendedor35", "nome": "SABRINA DA SILVA ROSENDO DE AGUIAR", "unidadeId": "unidade12", "perfil": "MISTO"},
-                {"id": "vendedor36", "nome": "LEONARDO PEREIRA DE SOUZA", "unidadeId": "unidade12", "perfil": "MISTO"},
-                {"id": "vendedor37", "nome": "GABRIEL REBOUCAS ESMERA DOS SANTOS", "unidadeId": "unidade13", "perfil": "FOOD"},
-                {"id": "vendedor38", "nome": "RICARDO MAGALHAES DE CARVALHO", "unidadeId": "unidade13", "perfil": "MISTO"},
-                {"id": "vendedor39", "nome": "JADIVAL ALMEIDA DA SILVA", "unidadeId": "unidade13", "perfil": "MISTO"},
-                {"id": "vendedor40", "nome": "GETULIO DE OLIVEIRA JUNIOR", "unidadeId": "unidade14", "perfil": "FOOD"},
-                {"id": "vendedor41", "nome": "GUILHERME FERREIRA TARGINO", "unidadeId": "unidade14", "perfil": "MISTO"},
-                {"id": "vendedor42", "nome": "DJAIR JUNIOR NASCIMENTO LOPES ROLIN", "unidadeId": "unidade14", "perfil": "MISTO"},
-                {"id": "vendedor43", "nome": "FRANCISCO CRISANLEUSON BEZERRA DA SILVA", "unidadeId": "unidade15", "perfil": "FOOD"},
-                {"id": "vendedor44", "nome": "JOAO FRANCISCO PEREIRA COSTA", "unidadeId": "unidade15", "perfil": "MISTO"},
-                {"id": "vendedor45", "nome": "PAULO HENRIQUE DO NASCIMENTO SILVA", "unidadeId": "unidade15", "perfil": "MISTO"},
-                {"id": "vendedor46", "nome": "MARIO BETUCCI NETO", "unidadeId": "unidade16", "perfil": "FOOD"},
-                {"id": "vendedor47", "nome": "KELITON VIANA GARCIA", "unidadeId": "unidade16", "perfil": "VAREJO DE PLANTA"},
-                {"id": "vendedor48", "nome": "CRISTIANO ALVES DE BARROS", "unidadeId": "unidade16", "perfil": "VAREJO DE PLANTA"}
-            ]
-        };
+        // Dados embutidos das unidades (fallback)
+        const unidadesEmbedded = [
+            {"id": "1", "nome": "CRT"},
+            {"id": "2", "nome": "DPR"},
+            {"id": "3", "nome": "DIT"},
+            {"id": "4", "nome": "REC"},
+            {"id": "5", "nome": "SFL"},
+            {"id": "6", "nome": "ITA"},
+            {"id": "7", "nome": "MRA"},
+            {"id": "8", "nome": "DCA"},
+            {"id": "9", "nome": "BAU"},
+            {"id": "10", "nome": "DSP"},
+            {"id": "11", "nome": "BTM"},
+            {"id": "12", "nome": "DMG"},
+            {"id": "13", "nome": "CNT"},
+            {"id": "14", "nome": "RJN"},
+            {"id": "15", "nome": "GYN"},
+            {"id": "16", "nome": "CPG"},
+            {"id": "17", "nome": "PDP"},
+            {"id": "18", "nome": "PVH"}
+        ];
 
-        // Carregar dados do JSON
-        async function carregarDadosListaSuspensa() {
-            // PRIMEIRO: Sempre usar dados embutidos para garantir funcionamento
-            dadosListaSuspensa = JSON.parse(JSON.stringify(dadosListaSuspensaEmbedded));
-            console.log('✅ Dados embutidos carregados (garantindo funcionamento)');
-            console.log(`📊 ${dadosListaSuspensa.unidades.length} unidades disponíveis`);
-            console.log(`👥 ${dadosListaSuspensa.vendedores.length} vendedores disponíveis`);
-            console.log('📋 Primeira unidade:', dadosListaSuspensa.unidades[0]?.nome);
-            console.log('👤 Primeiro vendedor:', dadosListaSuspensa.vendedores[0]?.nome);
+        // Carregar unidades do JSON
+        async function carregarUnidades() {
+            // Primeiro usar dados embutidos
+            dadosUnidades = [...unidadesEmbedded];
+            console.log('✅ Dados embutidos de unidades carregados');
             
-            // Inicializar dropdowns imediatamente com dados embutidos
-            inicializarDropdowns();
+            // Popular dropdown imediatamente
+            popularDropdownUnidades();
             
-            // DEPOIS: Tentar atualizar do arquivo (opcional, não bloqueia)
+            // Tentar atualizar do arquivo JSON
             try {
-                console.log('🔄 Tentando atualizar com dados-lista-suspensa.json...');
-                const response = await fetch('dados-lista-suspensa.json', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    cache: 'no-cache'
-                });
-                
+                const response = await fetch('dados_churn.json');
                 if (!response.ok) {
-                    throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+                    throw new Error(`Erro HTTP: ${response.status}`);
                 }
                 
                 const dados = await response.json();
                 
-                // Validar estrutura dos dados
-                if (!dados.unidades || !Array.isArray(dados.unidades)) {
-                    throw new Error('Estrutura de dados inválida: campo "unidades" não encontrado');
+                if (dados.unidades && Array.isArray(dados.unidades)) {
+                    // Converter formato do JSON para o formato esperado
+                    dadosUnidades = dados.unidades.map(u => ({
+                        id: String(u.id),
+                        nome: u.nome
+                    }));
+                    
+                    console.log(`✅ ${dadosUnidades.length} unidades carregadas do JSON`);
+                    popularDropdownUnidades();
                 }
-                if (!dados.vendedores || !Array.isArray(dados.vendedores)) {
-                    throw new Error('Estrutura de dados inválida: campo "vendedores" não encontrado');
-                }
-                
-                // Atualizar com dados do arquivo
-                dadosListaSuspensa = dados;
-                console.log('✅ Dados atualizados do arquivo JSON!');
-                console.log(`📊 ${dadosListaSuspensa.unidades.length} unidades no arquivo`);
-                console.log(`👥 ${dadosListaSuspensa.vendedores.length} vendedores no arquivo`);
-                
-                // Reinicializar dropdowns com dados atualizados
-                inicializarDropdowns();
             } catch (error) {
-                console.warn('⚠️ Não foi possível carregar dados-lista-suspensa.json');
-                console.warn('📝 Continuando com dados embutidos (já carregados)');
-                console.warn('💡 Dica: Para usar o arquivo JSON, abra via servidor local');
+                console.warn('⚠️ Não foi possível carregar dados_churn.json, usando dados embutidos:', error.message);
             }
         }
 
-        // Funções para gerenciar dropdowns
-        let handlerUnidade = null;
-        let handlerVendedor = null;
-
-        // Inicializar dropdowns
-        function inicializarDropdowns() {
+        // Popular dropdown de unidades
+        function popularDropdownUnidades() {
             const selectUnidade = document.getElementById('unidade');
-            const selectVendedor = document.getElementById('vendedor');
+            if (!selectUnidade) return;
             
-            if (!selectUnidade || !selectVendedor) {
-                console.error('Elementos do formulário não encontrados!');
-                return;
+            // Limpar opções (exceto a primeira)
+            while (selectUnidade.options.length > 1) {
+                selectUnidade.remove(1);
             }
             
-            // Verificar se os dados foram carregados
-            if (!dadosListaSuspensa || !dadosListaSuspensa.unidades || dadosListaSuspensa.unidades.length === 0) {
-                console.error('Dados das listas suspensas não foram carregados!');
-                return;
-            }
-            
-            // Limpar opções existentes
-            selectUnidade.innerHTML = '<option value="">Selecione a unidade...</option>';
-            selectVendedor.innerHTML = '<option value="">Primeiro selecione a unidade</option>';
-            selectVendedor.disabled = true;
-            
-            // Preencher dropdown de unidades com dados do JSON
-            dadosListaSuspensa.unidades.forEach(unidade => {
+            // Adicionar unidades
+            dadosUnidades.forEach(unidade => {
                 const option = document.createElement('option');
-                option.value = unidade.id;
+                option.value = unidade.nome;
                 option.textContent = unidade.nome;
                 selectUnidade.appendChild(option);
             });
-
-            console.log(`✅ Dropdown de unidades preenchido com ${dadosListaSuspensa.unidades.length} unidades`);
-
-            // Remover listeners antigos se existirem
-            if (handlerUnidade) {
-                selectUnidade.removeEventListener('change', handlerUnidade);
-            }
-            if (handlerVendedor) {
-                selectVendedor.removeEventListener('change', handlerVendedor);
-            }
-
-            // Event listener para mudança de unidade
-            handlerUnidade = function() {
-                const unidadeId = this.value;
-                const selectVendedor = document.getElementById('vendedor');
-                const inputPerfil = document.getElementById('perfilVendedor');
-                
-                // Limpar vendedor e perfil
-                selectVendedor.innerHTML = '<option value="">Selecione o vendedor...</option>';
-                selectVendedor.disabled = !unidadeId;
-                if (inputPerfil) inputPerfil.value = '';
-                
-                if (unidadeId) {
-                    // Filtrar vendedores da unidade selecionada usando dados do JSON
-                    const vendedoresFiltrados = dadosListaSuspensa.vendedores.filter(
-                        v => v.unidadeId === unidadeId
-                    );
-                    
-                    console.log(`📋 Vendedores encontrados para unidade ${unidadeId}: ${vendedoresFiltrados.length}`);
-                    
-                    if (vendedoresFiltrados.length === 0) {
-                        selectVendedor.innerHTML = '<option value="">Nenhum vendedor encontrado para esta unidade</option>';
-                        selectVendedor.disabled = true;
-                    } else {
-                        vendedoresFiltrados.forEach(vendedor => {
-                            const option = document.createElement('option');
-                            option.value = vendedor.id;
-                            option.textContent = vendedor.nome;
-                            option.dataset.perfil = vendedor.perfil || '';
-                            selectVendedor.appendChild(option);
-                        });
-                        selectVendedor.disabled = false;
-                    }
-                }
-            };
-
-            // Event listener para mudança de vendedor
-            handlerVendedor = function() {
-                const selectedOption = this.options[this.selectedIndex];
-                const inputPerfil = document.getElementById('perfilVendedor');
-                
-                if (selectedOption && selectedOption.dataset.perfil && inputPerfil) {
-                    inputPerfil.value = selectedOption.dataset.perfil;
-                    console.log(`✅ Perfil preenchido automaticamente: ${selectedOption.dataset.perfil}`);
-                } else if (inputPerfil) {
-                    inputPerfil.value = '';
-                }
-            };
-
-            // Adicionar listeners
-            selectUnidade.addEventListener('change', handlerUnidade);
-            selectVendedor.addEventListener('change', handlerVendedor);
             
-            console.log('✅ Dropdowns inicializados com sucesso usando dados do JSON!');
+            console.log(`✅ ${dadosUnidades.length} unidades adicionadas ao dropdown`);
         }
 
         // ============================================
-        // CLASSE PARA GERENCIAR OS AGENDAMENTOS
+        // GESTÃO DE AGENDAMENTOS
         // ============================================
         class AgendamentoManager {
             constructor() {
-                this.agendamentoEditando = null;
                 this.agendamentos = [];
-                this.configurarFormulario();
+                this.agendamentoEditando = null;
                 this.carregarAgendamentos();
             }
 
             // Carregar agendamentos do Firebase
             carregarAgendamentos() {
+                if (!database) {
+                    console.warn('Firebase não disponível, usando localStorage');
+                    this.carregarDoLocalStorage();
+                    return;
+                }
+
                 const agendamentosRef = database.ref('agendamentos');
-                
-                console.log('Conectando ao Firebase...');
                 
                 agendamentosRef.on('value', (snapshot) => {
                     const dados = snapshot.val();
-                    console.log('Dados recebidos do Firebase:', dados);
-                    this.agendamentos = dados ? Object.keys(dados).map(key => ({
-                        id: key,
-                        ...dados[key]
-                    })) : [];
-                    console.log('Agendamentos processados:', this.agendamentos);
+                    if (dados) {
+                        this.agendamentos = Object.keys(dados).map(id => ({
+                            id: id,
+                            ...dados[id]
+                        }));
+                    } else {
+                        this.agendamentos = [];
+                    }
                     this.renderizarLista();
                 }, (error) => {
                     console.error('Erro ao carregar agendamentos:', error);
-                    console.error('Código do erro:', error.code);
-                    console.error('Mensagem do erro:', error.message);
-                    alert('Erro ao carregar agendamentos: ' + error.message + '\n\nVerifique as regras de segurança do Firebase.');
+                    this.carregarDoLocalStorage();
                 });
+            }
+
+            // Carregar do localStorage como fallback
+            carregarDoLocalStorage() {
+                try {
+                    const dados = localStorage.getItem('agendamentos');
+                    if (dados) {
+                        this.agendamentos = JSON.parse(dados);
+                    }
+                    this.renderizarLista();
+                } catch (error) {
+                    console.error('Erro ao carregar do localStorage:', error);
+                    this.agendamentos = [];
+                    this.renderizarLista();
+                }
+            }
+
+            // Salvar agendamentos no Firebase
+            salvarAgendamentos() {
+                if (!database) {
+                    this.salvarNoLocalStorage();
+                    return;
+                }
+
+                const agendamentosRef = database.ref('agendamentos');
+                const dados = {};
+                
+                this.agendamentos.forEach(ag => {
+                    dados[ag.id] = {
+                        data: ag.data,
+                        nome: ag.nome,
+                        unidade: ag.unidade,
+                        vendedor: ag.vendedor,
+                        perfilVendedor: ag.perfilVendedor,
+                        comentarios: ag.comentarios,
+                        status: ag.status
+                    };
+                });
+
+                agendamentosRef.set(dados).catch(error => {
+                    console.error('Erro ao salvar no Firebase:', error);
+                    this.salvarNoLocalStorage();
+                });
+            }
+
+            // Salvar no localStorage como fallback
+            salvarNoLocalStorage() {
+                try {
+                    localStorage.setItem('agendamentos', JSON.stringify(this.agendamentos));
+                } catch (error) {
+                    console.error('Erro ao salvar no localStorage:', error);
+                }
             }
 
             // Adicionar novo agendamento
-            adicionarAgendamento(data, nome = '', unidade = '', vendedor = '', perfilVendedor = '', comentarios = '') {
-                // Buscar nomes dos valores selecionados
-                const unidadeNome = this.obterNomeUnidade(unidade);
-                const vendedorNome = this.obterNomeVendedor(vendedor);
-                
+            adicionarAgendamento(dadosForm) {
                 const novoAgendamento = {
-                    data: data,
-                    nome: nome,
-                    unidade: unidadeNome || unidade,
-                    unidadeId: unidade,
-                    vendedor: vendedorNome || vendedor,
-                    vendedorId: vendedor,
-                    perfilVendedor: perfilVendedor,
-                    comentarios: comentarios,
-                    status: 'Aguardando',
-                    dataCriacao: new Date().toISOString()
+                    id: Date.now().toString(),
+                    data: dadosForm.dataVisita,
+                    nome: dadosForm.nome || '',
+                    unidade: dadosForm.unidade || '',
+                    vendedor: dadosForm.vendedor || '',
+                    perfilVendedor: dadosForm.perfilVendedor || '',
+                    comentarios: dadosForm.comentarios || '',
+                    status: 'pendente'
                 };
 
-                console.log('Tentando adicionar agendamento:', novoAgendamento);
-
-                database.ref('agendamentos').push(novoAgendamento)
-                    .then((ref) => {
-                        console.log('Agendamento adicionado com sucesso! ID:', ref.key);
-                        // O listener do Firebase vai atualizar automaticamente a lista
-                    })
-                    .catch((error) => {
-                        console.error('Erro ao adicionar agendamento:', error);
-                        console.error('Código do erro:', error.code);
-                        console.error('Mensagem do erro:', error.message);
-                        alert('Erro ao adicionar agendamento: ' + error.message + '\n\nVerifique o console do navegador (F12) para mais detalhes.');
-                    });
+                this.agendamentos.push(novoAgendamento);
+                this.salvarAgendamentos();
+                this.renderizarLista();
             }
 
-            // Atualizar status de um agendamento
+            // Atualizar agendamento
+            atualizarAgendamento(id, dadosAtualizados) {
+                const index = this.agendamentos.findIndex(a => a.id === id);
+                if (index !== -1) {
+                    this.agendamentos[index] = {
+                        ...this.agendamentos[index],
+                        ...dadosAtualizados
+                    };
+                    this.salvarAgendamentos();
+                    this.renderizarLista();
+                }
+            }
+
+            // Remover agendamento
+            removerAgendamento(id) {
+                if (confirm('Tem certeza que deseja remover este agendamento?')) {
+                    if (database) {
+                        database.ref(`agendamentos/${id}`).remove()
+                            .then(() => {
+                                this.agendamentos = this.agendamentos.filter(a => a.id !== id);
+                                this.renderizarLista();
+                            })
+                            .catch(error => {
+                                console.error('Erro ao remover do Firebase:', error);
+                                this.agendamentos = this.agendamentos.filter(a => a.id !== id);
+                                this.salvarNoLocalStorage();
+                                this.renderizarLista();
+                            });
+                    } else {
+                        this.agendamentos = this.agendamentos.filter(a => a.id !== id);
+                        this.salvarNoLocalStorage();
+                        this.renderizarLista();
+                    }
+                }
+            }
+
+            // Atualizar status
             atualizarStatus(id, novoStatus) {
-                database.ref(`agendamentos/${id}/status`).set(novoStatus)
-                    .catch((error) => {
-                        console.error('Erro ao atualizar status:', error);
-                        alert('Erro ao atualizar status. Tente novamente.');
-                    });
+                const index = this.agendamentos.findIndex(a => a.id === id);
+                if (index !== -1) {
+                    this.agendamentos[index].status = novoStatus;
+                    this.salvarAgendamentos();
+                    this.renderizarLista();
+                }
             }
 
-            // Atualizar todos os campos de um agendamento
-            atualizarAgendamento(id, dados) {
-                const updates = {};
-                Object.keys(dados).forEach(campo => {
-                    updates[`agendamentos/${id}/${campo}`] = dados[campo];
-                });
-
-                database.ref().update(updates)
-                    .then(() => {
-                        this.agendamentoEditando = null;
-                    })
-                    .catch((error) => {
-                        console.error('Erro ao atualizar agendamento:', error);
-                        alert('Erro ao atualizar agendamento. Tente novamente.');
-                    });
-            }
-
-            // Iniciar modo de edição
+            // Iniciar edição
             iniciarEdicao(id) {
                 this.agendamentoEditando = id;
                 this.renderizarLista();
@@ -1035,54 +718,35 @@
 
             // Salvar edição
             salvarEdicao(id) {
-                const nome = document.getElementById(`edit-nome-${id}`).value.trim();
-                const unidade = document.getElementById(`edit-unidade-${id}`).value.trim();
-                const vendedor = document.getElementById(`edit-vendedor-${id}`).value.trim();
-                const perfilVendedor = document.getElementById(`edit-perfilVendedor-${id}`).value.trim();
-                const comentarios = document.getElementById(`edit-comentarios-${id}`).value.trim();
-                const status = document.getElementById(`status-${id}`).value;
+                const nome = document.getElementById(`edit-nome-${id}`).value;
+                const unidade = document.getElementById(`edit-unidade-${id}`).value;
+                const vendedor = document.getElementById(`edit-vendedor-${id}`).value;
+                const perfilVendedor = document.getElementById(`edit-perfilVendedor-${id}`).value;
+                const comentarios = document.getElementById(`edit-comentarios-${id}`).value;
 
                 this.atualizarAgendamento(id, {
-                    nome: nome,
-                    unidade: unidade,
-                    vendedor: vendedor,
-                    perfilVendedor: perfilVendedor,
-                    comentarios: comentarios,
-                    status: status
+                    nome,
+                    unidade,
+                    vendedor,
+                    perfilVendedor,
+                    comentarios
                 });
+
+                this.agendamentoEditando = null;
             }
 
-            // Remover agendamento
-            removerAgendamento(id) {
-                if (confirm('Tem certeza que deseja remover este agendamento?')) {
-                    database.ref(`agendamentos/${id}`).remove()
-                        .catch((error) => {
-                            console.error('Erro ao remover agendamento:', error);
-                            alert('Erro ao remover agendamento. Tente novamente.');
-                        });
-                }
+            // Formatar data
+            formatarDataCurta(data) {
+                if (!data) return '';
+                const d = new Date(data + 'T00:00:00');
+                return d.toLocaleDateString('pt-BR');
             }
 
-            // Formatar data para exibição
-            formatarData(dataString) {
-                const data = new Date(dataString + 'T00:00:00');
-                const opcoes = { 
-                    day: '2-digit', 
-                    month: '2-digit', 
-                    year: 'numeric'
-                };
-                return data.toLocaleDateString('pt-BR', opcoes);
-            }
-
-            // Formatar data curta
-            formatarDataCurta(dataString) {
-                const data = new Date(dataString + 'T00:00:00');
-                const opcoes = { 
-                    day: '2-digit', 
-                    month: '2-digit', 
-                    year: 'numeric'
-                };
-                return data.toLocaleDateString('pt-BR', opcoes);
+            // Escapar HTML
+            escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
             }
 
             // Renderizar lista de agendamentos
@@ -1102,7 +766,6 @@
                     return;
                 }
 
-                // Ordenar agendamentos por data (mais recentes primeiro)
                 const agendamentosOrdenados = [...this.agendamentos].sort((a, b) => {
                     return new Date(b.data) - new Date(a.data);
                 });
@@ -1130,7 +793,6 @@
                     const emEdicao = this.agendamentoEditando === agendamento.id;
                     
                     if (emEdicao) {
-                        // Modo de edição
                         html += `
                             <tr class="editing-row">
                                 <td>${dataFormatada}</td>
@@ -1168,8 +830,6 @@
                                         id="edit-perfilVendedor-${agendamento.id}"
                                         value="${this.escapeHtml(agendamento.perfilVendedor || '')}" 
                                         placeholder="Perfil..."
-                                        readonly
-                                        style="background: #f5f5f5;"
                                     >
                                 </td>
                                 <td>
@@ -1180,40 +840,21 @@
                                     >${this.escapeHtml(agendamento.comentarios || '')}</textarea>
                                 </td>
                                 <td>
-                                    <select 
-                                        class="status-select" 
-                                        id="status-${agendamento.id}"
-                                        style="font-size: 0.8rem; padding: 4px 6px;"
-                                    >
-                                        <option value="Aguardando" ${agendamento.status === 'Aguardando' ? 'selected' : ''}>Aguardando</option>
-                                        <option value="Concluído" ${agendamento.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
-                                        <option value="Cancelado" ${agendamento.status === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
-                                    </select>
+                                    <span class="status-badge ${classeStatus}">${agendamento.status}</span>
                                 </td>
                                 <td>
                                     <div class="table-actions">
-                                        <button 
-                                            class="btn-save" 
-                                            onclick="agendamentoManager.salvarEdicao('${agendamento.id}')"
-                                            title="Salvar"
-                                            style="padding: 4px 8px; font-size: 0.7rem;"
-                                        >
-                                            💾
+                                        <button class="btn-small btn-save" onclick="agendamentoManager.salvarEdicao('${agendamento.id}')">
+                                            💾 Salvar
                                         </button>
-                                        <button 
-                                            class="btn-cancel" 
-                                            onclick="agendamentoManager.cancelarEdicao()"
-                                            title="Cancelar"
-                                            style="padding: 4px 8px; font-size: 0.7rem;"
-                                        >
-                                            ✖️
+                                        <button class="btn-small btn-cancel" onclick="agendamentoManager.cancelarEdicao()">
+                                            ❌ Cancelar
                                         </button>
                                     </div>
                                 </td>
                             </tr>
                         `;
                     } else {
-                        // Modo de leitura
                         html += `
                             <tr>
                                 <td>${dataFormatada}</td>
@@ -1221,49 +862,21 @@
                                 <td>${this.escapeHtml(agendamento.unidade || '-')}</td>
                                 <td>${this.escapeHtml(agendamento.vendedor || '-')}</td>
                                 <td>${this.escapeHtml(agendamento.perfilVendedor || '-')}</td>
-                                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${this.escapeHtml(agendamento.comentarios || '')}">
-                                    ${this.escapeHtml(agendamento.comentarios || '-')}
-                                </td>
+                                <td>${this.escapeHtml(agendamento.comentarios || '-')}</td>
                                 <td>
-                                    <span class="event-status ${classeStatus}">${agendamento.status}</span>
+                                    <span class="status-badge ${classeStatus}">${agendamento.status}</span>
                                 </td>
                                 <td>
                                     <div class="table-actions">
-                                        <select 
-                                            class="status-select" 
-                                            onchange="agendamentoManager.atualizarStatus('${agendamento.id}', this.value)"
-                                            style="font-size: 0.75rem; padding: 4px 6px;"
-                                        >
-                                            <option value="Aguardando" ${agendamento.status === 'Aguardando' ? 'selected' : ''}>Aguardando</option>
-                                            <option value="Concluído" ${agendamento.status === 'Concluído' ? 'selected' : ''}>Concluído</option>
-                                            <option value="Cancelado" ${agendamento.status === 'Cancelado' ? 'selected' : ''}>Cancelado</option>
-                                        </select>
-                                        <button 
-                                            class="btn-edit" 
-                                            onclick="agendamentoManager.iniciarEdicao('${agendamento.id}')"
-                                            title="Editar"
-                                            style="padding: 4px 8px; font-size: 0.7rem;"
-                                        >
-                                            ✏️
+                                        <button class="btn-small btn-edit" onclick="agendamentoManager.iniciarEdicao('${agendamento.id}')">
+                                            ✏️ Editar
                                         </button>
-                                        <button 
-                                            class="btn-delete" 
-                                            onclick="agendamentoManager.removerAgendamento('${agendamento.id}')"
-                                            title="Excluir"
-                                            style="padding: 4px 8px; font-size: 0.7rem;"
-                                        >
-                                            🗑️
+                                        <button class="btn-small btn-status" onclick="agendamentoManager.atualizarStatus('${agendamento.id}', '${agendamento.status === 'pendente' ? 'concluido' : agendamento.status === 'concluido' ? 'cancelado' : 'pendente'}')">
+                                            ${agendamento.status === 'pendente' ? '✅ Concluir' : agendamento.status === 'concluido' ? '❌ Cancelar' : '🔄 Reabrir'}
                                         </button>
-                                        <a 
-                                            href="${this.gerarLink(agendamento)}"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            class="btn-link"
-                                            title="Abrir link"
-                                            style="padding: 4px 8px; font-size: 0.7rem;"
-                                        >
-                                            🔗
-                                        </a>
+                                        <button class="btn-small btn-delete" onclick="agendamentoManager.removerAgendamento('${agendamento.id}')">
+                                            🗑️ Excluir
+                                        </button>
                                     </div>
                                 </td>
                             </tr>
@@ -1278,119 +891,39 @@
 
                 container.innerHTML = html;
             }
-
-            // Obter nome da unidade pelo ID
-            obterNomeUnidade(unidadeId) {
-                if (!unidadeId) return '';
-                const unidade = dadosListaSuspensa.unidades.find(u => u.id === unidadeId);
-                return unidade ? unidade.nome : '';
-            }
-
-            // Obter nome do vendedor pelo ID
-            obterNomeVendedor(vendedorId) {
-                if (!vendedorId) return '';
-                const vendedor = dadosListaSuspensa.vendedores.find(v => v.id === vendedorId);
-                return vendedor ? vendedor.nome : '';
-            }
-
-            // Gerar link para o agendamento
-            gerarLink(agendamento) {
-                // Link para o formulário de Pesquisa de Satisfação do Cliente
-                return 'https://forms.gle/jBkZhmU4fKf7r7sU8';
-            }
-
-            // Escapar HTML para prevenir XSS
-            escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
-
-            // Configurar formulário
-            configurarFormulario() {
-                const form = document.getElementById('agendamentoForm');
-                const inputData = document.getElementById('dataVisita');
-                
-                // Definir data mínima como hoje
-                const hoje = new Date().toISOString().split('T')[0];
-                inputData.setAttribute('min', hoje);
-
-                form.addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    
-                    const data = inputData.value;
-                    const nome = document.getElementById('nome').value.trim();
-                    const unidade = document.getElementById('unidade').value.trim();
-                    const vendedor = document.getElementById('vendedor').value.trim();
-                    const perfilVendedor = document.getElementById('perfilVendedor').value.trim();
-                    const comentarios = document.getElementById('comentarios').value.trim();
-                    
-                    if (!data) {
-                        alert('Por favor, preencha o campo obrigatório (Data).');
-                        return;
-                    }
-
-                    if (!unidade) {
-                        alert('Por favor, selecione a unidade.');
-                        return;
-                    }
-
-                    if (!vendedor) {
-                        alert('Por favor, selecione o vendedor da rota.');
-                        return;
-                    }
-
-                    this.adicionarAgendamento(data, nome, unidade, vendedor, perfilVendedor, comentarios);
-                    
-                    // Limpar formulário
-                    form.reset();
-                    inputData.setAttribute('min', hoje);
-                    
-                    // Resetar dropdowns
-                    const selectUnidade = document.getElementById('unidade');
-                    const selectVendedor = document.getElementById('vendedor');
-                    const inputPerfil = document.getElementById('perfilVendedor');
-                    
-                    if (selectUnidade) {
-                        selectUnidade.value = '';
-                    }
-                    if (selectVendedor) {
-                        selectVendedor.innerHTML = '<option value="">Primeiro selecione a unidade</option>';
-                        selectVendedor.disabled = true;
-                    }
-                    if (inputPerfil) {
-                        inputPerfil.value = '';
-                    }
-                    
-                    // Scroll suave para o novo item
-                    setTimeout(() => {
-                        window.scrollTo({
-                            top: document.querySelector('.list-section').offsetTop - 20,
-                            behavior: 'smooth'
-                        });
-                    }, 100);
-                });
-            }
         }
 
-        // Inicializar o sistema quando a página carregar
+        // ============================================
+        // INICIALIZAÇÃO
+        // ============================================
         let agendamentoManager;
-        document.addEventListener('DOMContentLoaded', async () => {
-            // Verificar se o database foi inicializado
-            if (typeof database === 'undefined' || !database) {
-                console.error('Database não foi inicializado!');
-                alert('Erro: Não foi possível conectar ao banco de dados. Verifique o console (F12) para mais detalhes.');
-                return;
-            }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Carregar unidades
+            carregarUnidades();
             
-            // Carregar dados das listas suspensas primeiro
-            console.log('Carregando dados das listas suspensas...');
-            await carregarDadosListaSuspensa();
-            
-            console.log('Inicializando AgendamentoManager...');
+            // Inicializar gestor de agendamentos
             agendamentoManager = new AgendamentoManager();
+            
+            // Configurar formulário
+            const form = document.getElementById('agendamentoForm');
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                const dadosForm = {
+                    dataVisita: formData.get('dataVisita'),
+                    nome: formData.get('nome'),
+                    unidade: formData.get('unidade'),
+                    vendedor: formData.get('vendedor'),
+                    perfilVendedor: formData.get('perfilVendedor'),
+                    comentarios: formData.get('comentarios')
+                };
+                
+                agendamentoManager.adicionarAgendamento(dadosForm);
+                form.reset();
+            });
         });
     </script>
 </body>
 </html>
-
